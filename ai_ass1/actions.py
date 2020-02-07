@@ -1,11 +1,22 @@
 from node import Node
+from collections import deque
+import sys
+
+new_path = []
 
 def path(node):
-    path = []
-    while node.parent != None:
-        path.append(node.action)
-        node = node.parent
-    print(path)
+    if node.parent == None:
+        return
+    else:
+        path(node.parent)
+        print(f"-> {node.state}")
+        new_path.append(node.action)
+    
+def path_to_goal():
+    del new_path[0]
+    print("\n---------------------------------------\n")
+    print(f"Path to Goal: {new_path}")
+    print("\n---------------------------------------\n")
     
 def make_child_node(node, goal, board):
     children = []
