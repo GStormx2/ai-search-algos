@@ -3,20 +3,22 @@ from collections import deque
 from node import Node
 from board import Board
 from test import MyTime
+from result import Result
 import time
 
 def bfs(problem, board):
     start = time.perf_counter()
-    print("\n---------------------------------------\n")
-    print(f"Running BFS with\nState: {problem.state}\nGoal State: {problem.goal}\n...")
+    #print("\n---------------------------------------\n")
+    #print(f"Running BFS with\nState: {problem.state}\nGoal State: {problem.goal}\n...")
     frontier_size = 0
+    max_depth = 0
     
     frontier = deque([problem])
     explored = set()
     
     if problem.str_state == problem.goal_str:
-        print("Goal state found!")
-        return
+        end_prem = time.perf_counter()
+        return Result(problem, "success", frontier_size, problem.depth, end_prem - start)
     else:
        while frontier:
           # print("Taking a node")
@@ -33,12 +35,11 @@ def bfs(problem, board):
                    if len(frontier) > frontier_size:
                        frontier_size = len(frontier)
                    
+                   max_depth = child.depth
+                   
                    if child.str_state == child.goal_str:
-                       end = time.perf_counter()
-                       print("Goal state found!")
-                       print(f"Depth: {child.depth}\nFrontier Size: {frontier_size}\nElapsed Time: {end - start}")
-                       print("\n---------------------------------------\n")
-                       path(child)
-                       path_to_goal()   
-                       return      
-    print("bfs failed")
+                       end_final = time.perf_counter() 
+                       return Result(child, "success", frontier_size, child.depth, end_final - start)     
+    
+    end_failed = time.perf_counter()
+    return Result(None, "failed", frontier_size, max_depth, end_failed - start)
