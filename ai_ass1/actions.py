@@ -14,8 +14,7 @@ def path(node):
     
 def path_to_goal():
     del new_path[0]
-    print("\n---------------------------------------\n")
-    print(f"Path to Goal: {new_path}")
+    print(f"\nPath to Goal: {new_path}")
     print("\n---------------------------------------\n")
     
 def make_child_node(node, goal, board):
