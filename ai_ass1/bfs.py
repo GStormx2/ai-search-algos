@@ -1,8 +1,5 @@
-from actions import make_child_node, path, change_state, path_to_goal
+from actions import make_child_node
 from collections import deque
-from node import Node
-from board import Board
-from test import MyTime
 from result import Result
 import time
 

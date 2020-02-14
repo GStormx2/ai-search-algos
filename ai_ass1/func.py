@@ -3,14 +3,16 @@ from dls import dls
 from bfs import bfs
 from ids import ids
 from gbfs import gbfs
-from node import Node
+from a_star import a_star
+from ucs import ucs
+from node import Node, NodeFCost, NodeGCost
 from board import Board
 from result import Result
 
 
 #start_state = [1,3,4,8,6,2,7,0,5] #easy
-#start_state = [2,8,1,0,4,3,7,6,5] #medium
-start_state = [2,8,1,4,6,3,0,7,5] #hard
+start_state = [2,8,1,0,4,3,7,6,5] #medium
+#start_state = [2,8,1,4,6,3,0,7,5] #hard
 #start_state = [5,6,7,4,0,8,3,2,1] #worst
 #start_state = [0,8,7,6,5,4,3,2,1]
 #random_state = [3,2,0,1,4,5,6,7,8]
@@ -87,6 +89,20 @@ def main():
             elif result.verdict == 'failed':
                 print("Goal Not Found")
         
+        elif choice == 2:
+            print(f"Running UCS on: {start_state}")
+            print(f"Goal: {goal_state}\n...")
+            start_node_ucs = NodeGCost(start_state, goal_state, None, None, 0, 0)
+            result = ucs(start_node_ucs, board)
+            dls_limit = result.max_depth
+            if result.verdict == 'success':
+                print("Goal State Found!")
+                show_statistics(result)
+                path(result.node)
+                path_to_goal()
+            elif result.verdict == 'failed':
+                print("Goal Not Found")
+        
         elif choice == 3:
             if dls_limit is None:
                 print("DLS limit not set by BFS yet")
@@ -109,7 +125,6 @@ def main():
         elif choice == 4:
             print(f"Running IDS on: {start_state}")
             print(f"Goal: {goal_state}")
-            
             result = ids(start_node, board, 0)
             if result.verdict == 'success':
                 print("Goal State Found!")
@@ -131,6 +146,18 @@ def main():
             elif result.verdict == 'failed':
                 print("Goal Not Found")
         
+        elif choice == 6:
+            print(f"Running A* on: {start_state}")
+            print(f"Goal: {goal_state}\n...")
+            start_node_a = NodeFCost(start_state, goal_state, None, None, 0, 0) 
+            result = a_star(start_node_a, board)
+            if result.verdict == 'success':
+                print("Goal State Found!")
+                show_statistics(result)
+                path(result.node)
+                path_to_goal()
+            elif result.verdict == 'failed':
+                print("Goal Not Found")
         
 
 if __name__ == '__main__':

@@ -1,17 +1,27 @@
-import time
-import sys
+import heapq
 
-class MyTime:
-    def __init__(self):
-       self.complete = False
-       self.second = 0
-    
-    def start_timer(self):
-        while not self.complete:
-            sys.stdout.write(f" Elapsed Time: {self.second} seconds\r ")
-            self.second = self.second + 1
-            sys.stdout.flush()
-            time.sleep(1)
-        sys.stdout.write("\rComplete!\n")
-    def set_complete(val):
-        self.complete = val
+class SomeN:
+    def __init__(self, h, name):
+        self.h = h
+        self.name = name
+    def __eq__(self, other):
+        return self.h == other.h
+    def __lt__(self, other):
+        return self.h < other.h
+
+n1 = SomeN(7, "seven")
+somelist = [(n1)]
+heapq.heapify(somelist)
+
+n2 = SomeN(5, "shuvo")
+n3 = SomeN(6, "nafiur")
+heapq.heappush(somelist, (n2))
+heapq.heappush(somelist, (n3))
+n4 = SomeN(2, "tanqir")
+n5 = SomeN(3, "mohsin")
+heapq.heappush(somelist, (n4))
+heapq.heappush(somelist, (n5))
+
+while somelist:
+    n = heapq.heappop(somelist)
+    print(f"{n.h} -> {n.name}")

@@ -1,7 +1,5 @@
-from actions import make_child_node, path, change_state, path_to_goal
-from node import Node
+from actions import make_child_node
 from board import Board
-from test import MyTime
 from result import Result
 import time
 import heapq
@@ -29,7 +27,6 @@ def gbfs(problem, board):
         children = make_child_node(node, node.goal, board)
         
         for child in children:
-            generated_nodes = generated_nodes + 1
             if child.str_state not in explored:
                 child.h_cost = h_function(child)
                 _node = (child.h_cost, child)
@@ -40,7 +37,6 @@ def gbfs(problem, board):
                 
             if child.str_state == child.goal_str:
                 end_final = time.perf_counter()
-                print(f"Total nodes generated: {generated_nodes}")
                 return Result(child, "success", frontier_size, max_depth, end_final - start)
         
         if len(frontier) > frontier_size:
