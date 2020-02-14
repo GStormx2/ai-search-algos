@@ -21,9 +21,7 @@ start_state = [2,8,1,0,4,3,7,6,5] #medium
 goal_state = [1,2,3,8,0,4,7,6,5]
 board = Board(3)
 start_node = Node(start_state, goal_state, None, None, 0, 0)
-#bfs(start_node, start_board)
-#dls(start_node, start_board, 12)
-#some = ids(start_node, start_board, 0)
+
 
 #goal_state = []
 #start_state = []
@@ -31,14 +29,14 @@ start_node = Node(start_state, goal_state, None, None, 0, 0)
 def set_goal(size):
     print("Goal State: ")
     for x in range(0, size*size):
-        val = int(input())
-        goal_state.append(val)
+        x = int(input())
+        goal_state.append(x)
 
 def get_start_node(size):        
     print("Start State: ")
     for x in range(0, size*size):
-        val = int(input())
-        start_state.append(val)
+        x = int(input())
+        start_state.append(x)
     start_node = Node(start_state, goal_state, None, None, 0, 0)
     return start_node
 
