@@ -10,6 +10,7 @@ class Node:
         self.path_cost = path_cost
         
         self.h_cost = 0
+        self.f_cost = 0
         self.str_state = None
         
         if self.state:

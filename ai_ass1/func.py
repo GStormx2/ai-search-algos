@@ -10,8 +10,8 @@ from result import Result
 
 #start_state = [1,3,4,8,6,2,7,0,5] #easy
 #start_state = [2,8,1,0,4,3,7,6,5] #medium
-#start_state = [2,8,1,4,6,3,0,7,5] #hard
-start_state = [5,6,7,4,0,8,3,2,1] #worst
+start_state = [2,8,1,4,6,3,0,7,5] #hard
+#start_state = [5,6,7,4,0,8,3,2,1] #worst
 #start_state = [0,8,7,6,5,4,3,2,1]
 #random_state = [3,2,0,1,4,5,6,7,8]
 

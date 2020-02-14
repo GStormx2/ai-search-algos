@@ -11,6 +11,8 @@ def gbfs(problem, board):
     frontier_size = 0
     max_depth = 0
     
+    #TODO implement generated nodes
+    
     problem.h_cost = h_function(problem)
     _node = (problem.h_cost, problem)
     frontier = [_node]
@@ -27,15 +29,22 @@ def gbfs(problem, board):
         children = make_child_node(node, node.goal, board)
         
         for child in children:
+            generated_nodes = generated_nodes + 1
             if child.str_state not in explored:
                 child.h_cost = h_function(child)
                 _node = (child.h_cost, child)
                 heapq.heappush(frontier, _node)
                 
+                if max_depth < child.depth:
+                    max_depth = child.depth
+                
             if child.str_state == child.goal_str:
                 end_final = time.perf_counter()
+                print(f"Total nodes generated: {generated_nodes}")
                 return Result(child, "success", frontier_size, max_depth, end_final - start)
-            
+        
+        if len(frontier) > frontier_size:
+            frontier_size = len(frontier)
             
         
     end_failed = time.perf_counter()
