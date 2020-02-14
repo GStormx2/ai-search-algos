@@ -10,12 +10,12 @@ from result import Result
 
 #start_state = [1,3,4,8,6,2,7,0,5] #easy
 #start_state = [2,8,1,0,4,3,7,6,5] #medium
-start_state = [2,8,1,4,6,3,0,7,5] #hard
-#random_state = [5,6,7,4,0,8,3,2,1] #worst
-#random_state = [0,8,7,6,5,4,3,2,1]
+#start_state = [2,8,1,4,6,3,0,7,5] #hard
+start_state = [5,6,7,4,0,8,3,2,1] #worst
+#start_state = [0,8,7,6,5,4,3,2,1]
 #random_state = [3,2,0,1,4,5,6,7,8]
 
-#another_goal_state = [0,1,2,3,4,5,6,7,8]
+#goal_state = [0,1,2,3,4,5,6,7,8]
 goal_state = [1,2,3,8,0,4,7,6,5]
 board = Board(3)
 start_node = Node(start_state, goal_state, None, None, 0, 0)
@@ -55,7 +55,7 @@ def main():
     
     running = True
     choice = 0
-    
+    dls_limit = None
     while running:
         print("\n---------------------------------------------------")
         print("Choose and algorithm (1-6) or press 0 to quit:")
@@ -78,6 +78,39 @@ def main():
             print(f"Running BFS on: {start_state}")
             print(f"Goal: {goal_state}\n...")
             result = bfs(start_node, board)
+            dls_limit = result.max_depth
+            if result.verdict == 'success':
+                print("Goal State Found!")
+                show_statistics(result)
+                path(result.node)
+                path_to_goal()
+            elif result.verdict == 'failed':
+                print("Goal Not Found")
+        
+        elif choice == 3:
+            if dls_limit is None:
+                print("DLS limit not set by BFS yet")
+                dls_limit = int(input("Limit: "))
+            else:
+                print(f"BFS set limit to {dls_limit}")
+            print(f"Running DLS on: {start_state}")
+            print(f"Goal: {goal_state}")
+            print(f"limit: {dls_limit}\n...")
+            
+            result = dls(start_node, board, dls_limit)
+            if result.verdict == 'success':
+                print("Goal State Found!")
+                show_statistics(result)
+                path(result.node)
+                path_to_goal()
+            elif result.verdict == 'failed':
+                print("Goal Not Found")
+        
+        elif choice == 4:
+            print(f"Running IDS on: {start_state}")
+            print(f"Goal: {goal_state}")
+            
+            result = ids(start_node, board, 0)
             if result.verdict == 'success':
                 print("Goal State Found!")
                 show_statistics(result)
@@ -97,6 +130,8 @@ def main():
                 path_to_goal()
             elif result.verdict == 'failed':
                 print("Goal Not Found")
+        
+        
 
 if __name__ == '__main__':
     main()

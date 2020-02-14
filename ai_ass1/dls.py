@@ -1,3 +1,4 @@
+from actions import make_child_node
 from collections import deque
 from node import Node
 from board import Board
@@ -25,7 +26,7 @@ def dls(problem, board, limit):
         #print(f"{node.state}")
         if node.depth <= limit:
             
-            if node not in explored:
+            if node.str_state not in explored:
                 explored.add(node.str_state)
                 
                 if node.str_state == node.goal_str:

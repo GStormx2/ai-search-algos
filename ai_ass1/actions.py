@@ -16,6 +16,7 @@ def path_to_goal():
     del new_path[0]
     print(f"\nPath to Goal: {new_path}")
     print("\n---------------------------------------\n")
+    new_path.clear()
     
 def make_child_node(node, goal, board):
     children = []
