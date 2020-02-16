@@ -1,4 +1,4 @@
-from node import Node
+from structures import Node, NodeFCost, NodeGCost, Board
 from collections import deque
 import sys
 
@@ -17,6 +17,18 @@ def path_to_goal():
     print(f"\nPath to Goal: {new_path}")
     print("\n---------------------------------------\n")
     new_path.clear()
+
+def h_function(node):
+    i = 0
+    h = 0
+    for x in node.state:
+        #print(f"matching {x} with {node.goal[i]}")
+        if x != node.goal[i]:
+            h = h + 1
+            i = i + 1
+        else:
+            i = i + 1
+    return h
     
 def make_child_node(node, goal, board):
     children = []
