@@ -10,7 +10,7 @@ import random
 import matplotlib.pyplot as plt
 
 def unleash_chaos():
-    goal_state = [1,2,3,8,0,4,7,6,5]
+    goal_state = [1,0,8,2,7,3,4,6,5]
     board = Board(3)
     
     print(f"Generating random states from\nGoal: {goal_state}\nBoard Size: 3x3")
@@ -60,6 +60,11 @@ def unleash_chaos():
     
     print("Running all the algos for each depth (1 to 20):\n")
     run_algos(entry, goal_state, board)
+    
+    print("Running the graphs")
+    time_graph()
+    nodes_graph()
+    cost_graph()
 
 def run_algos(state_dict, goal, board):
     
@@ -237,7 +242,135 @@ def time_graph():
     ax.set_ylabel("Time (seconds)")
     
     plt.show()
+
+def nodes_graph():
+    x_axis = [x for x in range(1, 21, 1)]
     
+    nodes_bfs = []
+    nodes_dls = []
+    nodes_ucs = []
+    nodes_ids = []
+    nodes_gbfs = []
+    nodes_astar = []
+    
+    #BFS
+    data = read_file("bfs")
+    for value in data.values():
+        nodes_bfs.append(value["nodes"])
+    clear_dict(data)
+    
+    #DLS
+    data = read_file("dls")
+    for value in data.values():
+        nodes_dls.append(value["nodes"])
+    clear_dict(data)
+    
+    #IDS
+    data = read_file("ids")
+    for value in data.values():
+        nodes_ids.append(value["nodes"])
+    clear_dict(data)    
+    
+    #UCS
+    data = read_file("ucs")
+    for value in data.values():
+        nodes_ucs.append(value["nodes"])
+    clear_dict(data)
+    
+    #GBFS
+    data = read_file("gbfs")
+    for value in data.values():
+        nodes_gbfs.append(value["nodes"])
+    clear_dict(data)
+    
+    #ASTAR
+    data = read_file("astar")
+    for value in data.values():
+        nodes_astar.append(value["nodes"])
+    clear_dict(data)
+    
+    plt.style.use('seaborn-darkgrid')
+    fig, ax = plt.subplots()
+    plt.xticks(x_axis)
+    
+    ax.plot(x_axis, nodes_bfs, 'C1', label='BFS')
+    ax.plot(x_axis, nodes_dls, 'C2', label='DLS')
+    ax.plot(x_axis, nodes_ids, 'C3', label='IDS')
+    ax.plot(x_axis, nodes_ucs, 'C4', label='UCS')
+    ax.plot(x_axis, nodes_gbfs, 'C5', label='GBFS')
+    ax.plot(x_axis, nodes_astar, 'C6', label='A*')
+    
+    ax.legend()
+    ax.set_title("Nodes Generated")
+    ax.set_xlabel("Depth")
+    ax.set_ylabel("Number of Nodes")
+    
+    plt.show()
+
+def cost_graph():
+    x_axis = [x for x in range(1, 21, 1)]
+    
+    cost_bfs = []
+    cost_dls = []
+    cost_ucs = []
+    cost_ids = []
+    cost_gbfs = []
+    cost_astar = []
+    
+    #BFS
+    data = read_file("bfs")
+    for value in data.values():
+        cost_bfs.append(value["cost"])
+    clear_dict(data)
+    
+    #DLS
+    data = read_file("dls")
+    for value in data.values():
+        cost_dls.append(value["cost"])
+    clear_dict(data)
+    
+    #IDS
+    data = read_file("ids")
+    for value in data.values():
+        cost_ids.append(value["cost"])
+    clear_dict(data)    
+    
+    #UCS
+    data = read_file("ucs")
+    for value in data.values():
+        cost_ucs.append(value["cost"])
+    clear_dict(data)
+    
+    #GBFS
+    data = read_file("gbfs")
+    for value in data.values():
+        cost_gbfs.append(value["cost"])
+    clear_dict(data)
+    
+    #ASTAR
+    data = read_file("astar")
+    for value in data.values():
+        cost_astar.append(value["cost"])
+    clear_dict(data)
+    
+    plt.style.use('seaborn-darkgrid')
+    fig, ax = plt.subplots()
+    plt.xticks(x_axis)
+    
+    ax.plot(x_axis, cost_bfs, 'C1', label='BFS')
+    ax.plot(x_axis, cost_dls, 'C2', label='DLS')
+    ax.plot(x_axis, cost_ids, 'C3', label='IDS')
+    ax.plot(x_axis, cost_ucs, 'C4', label='UCS')
+    ax.plot(x_axis, cost_gbfs, 'C5', label='GBFS')
+    ax.plot(x_axis, cost_astar, 'C6', label='A*')
+    
+    ax.legend()
+    ax.set_title("Path Cost")
+    ax.set_xlabel("Depth")
+    ax.set_ylabel("Cost")
+    
+    plt.show()
+        
 def read_file(name):
     path = "data/" + name + ".json"
     with open(path, "r") as file_obj:
@@ -257,5 +390,3 @@ def clear_dict(entry):
             "nodes": 0,
             "cost": 0
         }
-if __name__ == "__main__":
-    time_graph()
