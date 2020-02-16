@@ -7,6 +7,7 @@ import json
 import pprint
 import time
 import random
+import matplotlib.pyplot as plt
 
 def unleash_chaos():
     goal_state = [1,2,3,8,0,4,7,6,5]
@@ -27,13 +28,12 @@ def unleash_chaos():
     while frontier:
         _node = frontier.popleft()
         explored.add(_node)
-        
+                
         children = make_child_node(_node, _node.goal, board)
         
         for child in children:
             if child.depth > 20:
-                break
-            
+                break   
             if child.str_state not in explored:
                 explored.add(child.str_state)
                 frontier.append(child)
@@ -51,8 +51,12 @@ def unleash_chaos():
         new = item[x]
         entry[depth] = new
     print("Picking a random state for each depth..")
+    
     for depth, item in entry.items():
-        print(f"Depth #{depth} -> {item}")
+        if depth < 10:
+            print(f"Depth #{depth}  -> {item}")
+        else:
+            print(f"Depth #{depth} -> {item}")
     
     print("Running all the algos for each depth (1 to 20):\n")
     run_algos(entry, goal_state, board)
@@ -60,12 +64,7 @@ def unleash_chaos():
 def run_algos(state_dict, goal, board):
     
     entry = {}
-    for x in range(1, 21, 1):
-        entry[x] = {
-            "time": 1.0,
-            "nodes": 1,
-            "cost": 1
-        }
+    clear_dict(entry)
     
     #BFS
     sys.stdout.write("Generating stats for BFS..")         
@@ -111,7 +110,7 @@ def run_algos(state_dict, goal, board):
             entry[x]["time"] = result.elapsed_time
             entry[x]["nodes"] = result.gen_nodes
             entry[x]["cost"] = result.node.path_cost
-            sys.stdout.write(f" #{x}")
+            sys.stdout.write(f" #{x},")
         else:
             entry[x]["time"] = 0.0
             entry[x]["nodes"] = 0
@@ -174,11 +173,81 @@ def run_algos(state_dict, goal, board):
     print("")
     write_file(entry, "astar")
     clear_dict(entry)
+
+def time_graph():
+    x_axis = [x for x in range(1, 21, 1)]
+    
+    time_bfs = []
+    time_dls = []
+    time_ucs = []
+    time_ids = []
+    time_gbfs = []
+    time_astar = []
+    
+    #BFS
+    data = read_file("bfs")
+    for value in data.values():
+        time_bfs.append(value["time"])
+    clear_dict(data)
+    
+    #DLS
+    data = read_file("dls")
+    for value in data.values():
+        time_dls.append(value["time"])
+    clear_dict(data)
+    
+    #IDS
+    data = read_file("ids")
+    for value in data.values():
+        time_ids.append(value["time"])
+    clear_dict(data)    
+    
+    #UCS
+    data = read_file("ucs")
+    for value in data.values():
+        time_ucs.append(value["time"])
+    clear_dict(data)
+    
+    #GBFS
+    data = read_file("gbfs")
+    for value in data.values():
+        time_gbfs.append(value["time"])
+    clear_dict(data)
+    
+    #ASTAR
+    data = read_file("astar")
+    for value in data.values():
+        time_astar.append(value["time"])
+    clear_dict(data)
+    
+    plt.style.use('seaborn-darkgrid')
+    fig, ax = plt.subplots()
+    plt.xticks(x_axis)
+    
+    ax.plot(x_axis, time_bfs, 'C1', label='BFS')
+    ax.plot(x_axis, time_dls, 'C2', label='DLS')
+    ax.plot(x_axis, time_ids, 'C3', label='IDS')
+    ax.plot(x_axis, time_ucs, 'C4', label='UCS')
+    ax.plot(x_axis, time_gbfs, 'C5', label='GBFS')
+    ax.plot(x_axis, time_astar, 'C6', label='A*')
+    
+    ax.legend()
+    ax.set_title("Clock Time")
+    ax.set_xlabel("Depth")
+    ax.set_ylabel("Time (seconds)")
+    
+    plt.show()
+    
+def read_file(name):
+    path = "data/" + name + ".json"
+    with open(path, "r") as file_obj:
+        data = json.load(file_obj)
+    return data
     
 def write_file(entry, name):
     path = "data/" + name + ".json"
     with open(path, "w") as file_obj:
-        json.dump(entry, file_obj)
+        json.dump(entry, file_obj, indent=4)
     print(f"written to {path}\n")
     
 def clear_dict(entry):
@@ -189,4 +258,4 @@ def clear_dict(entry):
             "cost": 0
         }
 if __name__ == "__main__":
-    unleash_chaos()
+    time_graph()
