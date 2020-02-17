@@ -1,0 +1,5 @@
+#skip all this
+ai_ass1/log/*
+
+#except this
+!ai_ass1/log/README.md
