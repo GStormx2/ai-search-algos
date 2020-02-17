@@ -74,7 +74,7 @@ def run_algos(state_dict, goal, board):
     #BFS
     sys.stdout.write("Generating stats for BFS..")         
     for x in range(1, 21):
-        result = bfs(Node(state_dict[x], goal, None, None, 0, 0), board)
+        result = bfs(Node(state_dict[x], goal, None, None, 0, 0), board, verbose=False)
         if result.verdict == "success":
             entry[x]["time"] = result.elapsed_time
             entry[x]["nodes"] = result.gen_nodes
@@ -92,7 +92,7 @@ def run_algos(state_dict, goal, board):
     #DLS
     sys.stdout.write("Generating stats for DLS..")         
     for x in range(1, 21):
-        result = dls(Node(state_dict[x], goal, None, None, 0, 0), board, x+1)
+        result = dls(Node(state_dict[x], goal, None, None, 0, 0), board, x+1, verbose=False)
         if result.verdict == "success":
             entry[x]["time"] = result.elapsed_time
             entry[x]["nodes"] = result.gen_nodes
@@ -110,7 +110,7 @@ def run_algos(state_dict, goal, board):
     #IDS
     sys.stdout.write("Generating stats for IDS..")         
     for x in range(1, 21):
-        result = ids(Node(state_dict[x], goal, None, None, 0, 0), board, 0)
+        result = ids(Node(state_dict[x], goal, None, None, 0, 0), board, 0, verbose=False)
         if result.verdict == "success":
             entry[x]["time"] = result.elapsed_time
             entry[x]["nodes"] = result.gen_nodes
@@ -128,7 +128,7 @@ def run_algos(state_dict, goal, board):
     #UCS
     sys.stdout.write("Generating stats for UCS..")         
     for x in range(1, 21):
-        result = ucs(NodeGCost(state_dict[x], goal, None, None, 0, 0), board)
+        result = ucs(NodeGCost(state_dict[x], goal, None, None, 0, 0), board, verbose=False)
         if result.verdict == "success":
             entry[x]["time"] = result.elapsed_time
             entry[x]["nodes"] = result.gen_nodes
@@ -146,7 +146,7 @@ def run_algos(state_dict, goal, board):
     #GBFS
     sys.stdout.write("Generating stats for GBFS..")         
     for x in range(1, 21):
-        result = gbfs(Node(state_dict[x], goal, None, None, 0, 0), board)
+        result = gbfs(Node(state_dict[x], goal, None, None, 0, 0), board, verbose=False)
         if result.verdict == "success":
             entry[x]["time"] = result.elapsed_time
             entry[x]["nodes"] = result.gen_nodes
@@ -164,7 +164,7 @@ def run_algos(state_dict, goal, board):
     #ASTAR
     sys.stdout.write("Generating stats for A*..")         
     for x in range(1, 21):
-        result = a_star(NodeFCost(state_dict[x], goal, None, None, 0, 0), board)
+        result = a_star(NodeFCost(state_dict[x], goal, None, None, 0, 0), board, verbose=False)
         if result.verdict == "success":
             entry[x]["time"] = result.elapsed_time
             entry[x]["nodes"] = result.gen_nodes

@@ -7,11 +7,11 @@ from generator import unleash_chaos
 #start_state = [2,8,1,0,4,3,7,6,5] #medium
 #start_state = [2,8,1,4,6,3,0,7,5] #hard
 #start_state = [5,6,7,4,0,8,3,2,1] #worst
-start_state = [0,8,7,6,5,4,3,2,1]
+start_state = [6, 8, 7, 0, 5, 1, 4, 2, 3]
 #random_state = [3,2,0,1,4,5,6,7,8]
 
 #goal_state = [0,1,2,3,4,5,6,7,8]
-goal_state = [1,2,3,8,0,4,7,6,5]
+goal_state = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 board = Board(3)
 start_node = Node(start_state, goal_state, None, None, 0, 0)
 
@@ -74,7 +74,7 @@ def main():
         elif choice == 1:
             print(f"Running BFS on: {start_state}")
             print(f"Goal: {goal_state}\n...")
-            result = bfs(start_node, board)
+            result = bfs(start_node, board, verbose=True)
             dls_limit = result.max_depth
             if result.verdict == 'success':
                 print("Goal State Found!")

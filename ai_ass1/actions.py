@@ -15,7 +15,6 @@ def path(node):
 def path_to_goal():
     del new_path[0]
     print(f"\nPath to Goal: {new_path}")
-    print("\n---------------------------------------\n")
     new_path.clear()
 
 def h_function(node):
