@@ -61,10 +61,24 @@ def unleash_chaos():
     print("Running all the algos for each depth (1 to 20):\n")
     run_algos(entry, goal_state, board)
     
-    print("Running the graphs")
-    time_graph()
-    nodes_graph()
-    cost_graph()
+    print("All statistics have been recorded and saved in .json files")
+    while True:
+        print("Choose which graphs to show (1-3). To exit this loop please enter 0.")
+        print("Exiting will take you back initial menu!")
+        print("1. 'Time' Graph")
+        print("2. 'Nodes Generated' Graph")
+        print("3. 'Path Cost' Graph")
+        choice = int(input("Choice: "))
+        if choice == 0:
+            break
+        elif choice == 1:
+            time_graph()
+        elif choice == 2:
+            nodes_graph()
+        elif choice == 3:
+            cost_graph()
+        else:
+            continue
 
 def run_algos(state_dict, goal, board):
     
@@ -189,6 +203,7 @@ def time_graph():
     time_gbfs = []
     time_astar = []
     
+    print("Reading data from .json files..")
     #BFS
     data = read_file("bfs")
     for value in data.values():
@@ -224,11 +239,14 @@ def time_graph():
     for value in data.values():
         time_astar.append(value["time"])
     clear_dict(data)
+    print("Reading complete!")
     
+    print("Initiating graph..")
     plt.style.use('seaborn-darkgrid')
     fig, ax = plt.subplots()
     plt.xticks(x_axis)
     
+    print("Plotting the points..")
     ax.plot(x_axis, time_bfs, 'C1', label='BFS')
     ax.plot(x_axis, time_dls, 'C2', label='DLS')
     ax.plot(x_axis, time_ids, 'C3', label='IDS')
@@ -236,11 +254,13 @@ def time_graph():
     ax.plot(x_axis, time_gbfs, 'C5', label='GBFS')
     ax.plot(x_axis, time_astar, 'C6', label='A*')
     
+    print("Setting legend and labels")
     ax.legend()
     ax.set_title("Clock Time")
     ax.set_xlabel("Depth")
     ax.set_ylabel("Time (seconds)")
     
+    print("All done! Showing graph")
     plt.show()
 
 def nodes_graph():

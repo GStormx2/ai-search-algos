@@ -4,7 +4,7 @@ from structures import Result
 import time
 import heapq
 
-def bfs(problem, board, verbose=True):
+def bfs(problem, board, verbose=False):
     start = time.perf_counter()
     
     with open("log/bfs.txt", "w") as file_obj:
@@ -48,8 +48,8 @@ def bfs(problem, board, verbose=True):
                 gen_nodes = gen_nodes + 1
                 if child.str_state not in explored:
                     if verbose:
-                        print(f"    Child not explored. Adding to Frontier & Explored")
-                        file_obj.write(f"    Child not explored. Adding to Frontier & Explored\n")
+                        print(f"\tChild not explored. Adding to Frontier & Explored")
+                        file_obj.write(f"\tChild not explored. Adding to Frontier & Explored\n")
                     frontier.append(child)
                     explored.add(child.str_state)
                     if len(frontier) > frontier_size:
@@ -57,16 +57,16 @@ def bfs(problem, board, verbose=True):
                     
                     max_depth = child.depth
                     if verbose:
-                        print(f"    Current Depth: {max_depth}")
-                        file_obj.write(f"    Current Depth: {max_depth}\n")
+                        print(f"\tCurrent Depth: {max_depth}")
+                        file_obj.write(f"\tCurrent Depth: {max_depth}\n")
                     
                     if child.str_state == child.goal_str:
                         end_final = time.perf_counter() 
                         return Result(child, "success", frontier_size, child.depth, gen_nodes, end_final - start)     
                 else:
                     if verbose:
-                        print(f"    Child explored. Skipping")
-                        file_obj.write(f"    Child explored. Skipping\n")
+                        print(f"\tChild explored. Skipping")
+                        file_obj.write(f"\tChild explored. Skipping\n")
             if verbose:
                 print(f"Nodes generated: {gen_nodes}")
                 file_obj.write(f"Nodes generated: {gen_nodes}\n")
@@ -74,66 +74,100 @@ def bfs(problem, board, verbose=True):
     end_failed = time.perf_counter()
     return Result(None, "failed", frontier_size, max_depth, gen_nodes, end_failed - start)
 
-def ucs(problem, board, verbose=True):
+def ucs(problem, board, verbose=False):
     start = time.perf_counter()
     
-    gen_nodes = 0
-    max_depth = 0
+    with open("log/ucs.txt", "w") as file_obj:
     
-    _node = (problem.path_cost, problem)
-    frontier = [_node]
-    frontier_size = len(frontier)
-    explored = set()
-    mapp = {}
-    
-    if problem.str_state == problem.goal_str:
-        end_prem = time.perf_counter()
-        return Result(problem, "success", frontier_size, max_depth, gen_nodes, end_prem - start)
-    
-    heapq.heapify(frontier)
-    
-    while frontier:
-        _node = heapq.heappop(frontier)
-        node = _node[1]
-        explored.add(node.str_state)
+        gen_nodes = 0
+        max_depth = 0
         
-        if node.str_state == node.goal_str:
-            end_final = time.perf_counter()
-            return Result(node, "success", frontier_size, max_depth, gen_nodes, end_final - start)
+        _node = (problem.path_cost, problem)
+        frontier = [_node]
+        frontier_size = len(frontier)
+        explored = set()
+        mapp = {}
         
-        children = make_child_node(node, node.goal, board)
+        if problem.str_state == problem.goal_str:
+            end_prem = time.perf_counter()
+            return Result(problem, "success", frontier_size, max_depth, gen_nodes, end_prem - start)
         
-        for child in children:
-            gen_nodes = gen_nodes + 1
-            _node = (child.path_cost, child)
+        heapq.heapify(frontier)
+        
+        while frontier:
+            if verbose:
+                print(f"Frontier (PriorityQ) before extraction: {len(frontier)}")
+                file_obj.write(f"Frontier (PriorityQ) before extraction: {len(frontier)}\n")
+            _node = heapq.heappop(frontier)
+            if verbose:
+                print(f"Frontier (PriorityQ) after extraction: {len(frontier)}")
+                file_obj.write(f"Frontier (PriorityQ) after extraction: {len(frontier)}\n")
+            node = _node[1]
+            explored.add(node.str_state)
+            if verbose:
+                print(f"Adding to explored. Current count: {len(explored)}")
+                file_obj.write(f"Adding to explored. Current count: {len(explored)}\n")
             
-            if child.str_state not in explored:
-                heapq.heappush(frontier, _node)
-                explored.add(child.str_state)
-                mapp[child.str_state] = child
-                
-                if max_depth < child.depth:
-                    max_depth = child.depth
+            if node.str_state == node.goal_str:
+                end_final = time.perf_counter()
+                return Result(node, "success", frontier_size, max_depth, gen_nodes, end_final - start)
             
-            elif child.str_state in mapp and child.path_cost < mapp[child.str_state].path_cost:
+            children = make_child_node(node, node.goal, board)
+            if verbose:
+                print(f"Generating children nodes..")
+                file_obj.write(f"Generating children nodes..\n")
+                for child in children:
+                    print(f"-> Action: {child.action}, State: {child.state}")
+                    file_obj.write(f"-> Action: {child.action}, State: {child.state}\n")
+            for child in children:
+                gen_nodes = gen_nodes + 1
+                _node = (child.path_cost, child)
+                if verbose:
+                    print(f"....Taking child: {child.state}")
+                    file_obj.write(f"....Taking child: {child.state}\n")
+                if child.str_state not in explored:
+                    if verbose:
+                        print(f"    Child not explored. Adding to Frontier & Explored")
+                        file_obj.write(f"    Child not explored. Adding to Frontier & Explored\n")
+                    heapq.heappush(frontier, _node)
+                    explored.add(child.str_state)
+                    if verbose:
+                        print(f"\tAdding child to Map: '{child.str_state}' -> {child}'")
+                        file_obj.write(f"\tAdding child to Map: '{child.str_state}' -> {child}\n")
+                    mapp[child.str_state] = child
+                    
+                    if max_depth < child.depth:
+                        max_depth = child.depth
+                        if verbose:
+                            print(f"\tCurrent Depth: {max_depth}")
+                            file_obj.write(f"\tCurrent Depth: {max_depth}\n")
                 
-                index = frontier.index((mapp[child.str_state].path_cost, mapp[child.str_state]))
-                frontier[int(index)] = (child.path_cost, child)
-                heapq.heapify(frontier)
-                mapp[child.str_state] = child
-        
-        if len(frontier) > frontier_size:
-            frontier_size = len(frontier)
+                elif child.str_state in mapp and child.path_cost < mapp[child.str_state].path_cost:
+                    if verbose:
+                        print(f"\tBetter than child found in Map\n-> Updating ('{child.str_state}'-> {mapp[child.str_state]}, Cost: {mapp[child.str_state].path_cost} with ('{child.str_state}'-> {child}, Cost: {child.path_cost}))")
+                    index = frontier.index((mapp[child.str_state].path_cost, mapp[child.str_state]))
+                    frontier[int(index)] = (child.path_cost, child)
+                    heapq.heapify(frontier)
+                    mapp[child.str_state] = child
+                else:
+                    if verbose:
+                        print(f"\tChild explored. Not a better child. Skipping")
+                        file_obj.write("\tChild explored. Not a better child. Skipping\n")
+            if verbose:
+                print(f"Nodes generated: {gen_nodes}")
+                file_obj.write(f"Nodes generated: {gen_nodes}\n")
+            
+            if len(frontier) > frontier_size:
+                frontier_size = len(frontier)
 
     end_failed = time.perf_counter()
     return Result(None, "failed", frontier_size, max_depth, gen_nodes, end_failed - start)
 
-def dls(problem, board, limit, verbose=True):
+def dls(problem, board, limit, verbose=False):
     #print("\n---------------------------------------\n")
     #print(f"Running DFS with\nState: {problem.state}\nGoal State: {problem.goal}\nLimit: {limit}...")
     
     start = time.perf_counter()
-    
     
     frontier = [problem]
     frontier_size = len(frontier)

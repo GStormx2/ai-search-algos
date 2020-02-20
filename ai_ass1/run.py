@@ -3,10 +3,10 @@ from actions import path, path_to_goal
 from algorithms import bfs, ucs, dls, ids, gbfs, a_star
 from generator import unleash_chaos
 
-start_state = [1,3,4,8,6,2,7,0,5] #easy
+#start_state = [1,3,4,8,6,2,7,0,5] #easy
 #start_state = [2,8,1,0,4,3,7,6,5] #medium
 #start_state = [2,8,1,4,6,3,0,7,5] #hard
-#start_state = [5,6,7,4,0,8,3,2,1] #worst
+start_state = [5,6,7,4,0,8,3,2,1] #worst
 #start_state = [6, 8, 7, 0, 5, 1, 4, 2, 3]
 #random_state = [3,2,0,1,4,5,6,7,8]
 
@@ -88,7 +88,7 @@ def main():
             print(f"Running UCS on: {start_state}")
             print(f"Goal: {goal_state}\n...")
             start_node_ucs = NodeGCost(start_state, goal_state, None, None, 0, 0)
-            result = ucs(start_node_ucs, board)
+            result = ucs(start_node_ucs, board, verbose=False)
             dls_limit = result.max_depth
             if result.verdict == 'success':
                 print("Goal State Found!")
