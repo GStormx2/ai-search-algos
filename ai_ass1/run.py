@@ -74,7 +74,7 @@ def main():
         elif choice == 1:
             print(f"Running BFS on: {start_state}")
             print(f"Goal: {goal_state}\n...")
-            result = bfs(start_node, board, verbose=True)
+            result = bfs(start_node, board)
             dls_limit = result.max_depth
             if result.verdict == 'success':
                 print("Goal State Found!")
