@@ -9,8 +9,8 @@ import time
 import random
 import matplotlib.pyplot as plt
 
-def unleash_chaos():
-    goal_state = [1,0,8,2,7,3,4,6,5]
+def unleash_chaos(goal_state):
+    #goal_state = [1,0,8,2,7,3,4,6,5]
     board = Board(3)
     
     print(f"Generating random states from\nGoal: {goal_state}\nBoard Size: 3x3")

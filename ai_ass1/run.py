@@ -6,18 +6,19 @@ from generator import unleash_chaos
 #start_state = [1,3,4,8,6,2,7,0,5] #easy
 #start_state = [2,8,1,0,4,3,7,6,5] #medium
 #start_state = [2,8,1,4,6,3,0,7,5] #hard
-start_state = [5,6,7,4,0,8,3,2,1] #worst
+#start_state = [5,6,7,4,0,8,3,2,1] #worst
 #start_state = [6, 8, 7, 0, 5, 1, 4, 2, 3]
 #random_state = [3,2,0,1,4,5,6,7,8]
 
 #goal_state = [0,1,2,3,4,5,6,7,8]
-goal_state = [1,2,3,8,0,4,7,6,5]
-board = Board(3)
-start_node = Node(start_state, goal_state, None, None, 0, 0)
+#goal_state = [1,2,3,8,0,4,7,6,5]
+#board = Board(3)
+#start_node = Node(start_state, goal_state, None, None, 0, 0)
 
 
-#goal_state = []
-#start_state = []
+goal_state = []
+start_state = []
+verbose = False
 
 def set_goal(size):
     print("Goal State: ")
@@ -43,11 +44,17 @@ def show_statistics(node):
     
 def main():
     
-    #bs = int(input("Board size: "))
-    #board = Board(bs)
+    bs = int(input("Board size: "))
+    board = Board(bs)
     
-    #set_goal(bs)
-    #start_node = get_start_node(bs)
+    set_goal(bs)
+    start_node = get_start_node(bs)
+    
+    vb = input("Do you want to print intermediate steps? (y/n): ")
+    if vb == 'y' or vb == 'Y':
+        verbose = True
+    elif vb == 'n' or vb == 'N':
+        verbose = False
     
     running = True
     choice = 0
@@ -155,7 +162,7 @@ def main():
                 print("Goal Not Found")
         
         elif choice == 7:
-            unleash_chaos()
+            unleash_chaos(goal_state)
 
 if __name__ == '__main__':
     main()
