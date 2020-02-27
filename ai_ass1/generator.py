@@ -68,6 +68,7 @@ def unleash_chaos(goal_state):
         print("1. 'Time' Graph")
         print("2. 'Nodes Generated' Graph")
         print("3. 'Path Cost' Graph")
+        print("4. Rate of node generated")
         choice = int(input("Choice: "))
         if choice == 0:
             break
@@ -77,6 +78,8 @@ def unleash_chaos(goal_state):
             nodes_graph()
         elif choice == 3:
             cost_graph()
+        elif choice == 4:
+            node_by_time()
         else:
             continue
 
@@ -390,6 +393,98 @@ def cost_graph():
     ax.set_ylabel("Cost")
     
     plt.show()
+
+def node_by_time():
+    x_axis = [x for x in range(1, 21, 1)]
+    
+    time_bfs = []
+    time_dls = []
+    time_ucs = []
+    time_ids = []
+    time_gbfs = []
+    time_astar = []
+    
+    nodes_bfs = []
+    nodes_dls = []
+    nodes_ucs = []
+    nodes_ids = []
+    nodes_gbfs = []
+    nodes_astar = []
+    
+    #BFS
+    data = read_file("bfs")
+    for value in data.values():
+        time_bfs.append(value["time"])
+        nodes_bfs.append(value["nodes"])
+    clear_dict(data)
+    
+    #DLS
+    data = read_file("dls")
+    for value in data.values():
+        time_dls.append(value["time"])
+        nodes_dls.append(value["nodes"])
+    clear_dict(data)
+    
+    #IDS
+    data = read_file("ids")
+    for value in data.values():
+        time_ids.append(value["time"])
+        nodes_ids.append(value["nodes"])
+    clear_dict(data)    
+    
+    #UCS
+    data = read_file("ucs")
+    for value in data.values():
+        time_ucs.append(value["time"])
+        nodes_ucs.append(value["nodes"])
+    clear_dict(data)
+    
+    #GBFS
+    data = read_file("gbfs")
+    for value in data.values():
+        time_gbfs.append(value["time"])
+        nodes_gbfs.append(value["nodes"])
+    clear_dict(data)
+    
+    #ASTAR
+    data = read_file("astar")
+    for value in data.values():
+        time_astar.append(value["time"])
+        nodes_astar.append(value["nodes"])
+    clear_dict(data)
+
+    ratio_bfs = []
+    ratio_dls = []
+    ratio_ids = []
+    ratio_ucs = []
+    ratio_gbfs = []
+    ratio_astar = []
+
+    for x in range(0, 20):
+        ratio_bfs.append(nodes_bfs[x] / time_bfs[x])
+        ratio_dls.append(nodes_dls[x] / time_dls[x])  
+        ratio_ids.append(nodes_ids[x] / time_ids[x])
+        ratio_ucs.append(nodes_ucs[x] / time_ucs[x])
+        ratio_gbfs.append(nodes_gbfs[x] / time_gbfs[x])
+        ratio_astar.append(nodes_astar[x] / time_astar[x])
+    plt.style.use('seaborn-darkgrid')
+    fig, ax = plt.subplots()
+    plt.xticks(x_axis)
+    
+    ax.plot(x_axis, ratio_bfs, 'C1', label='BFS')
+    ax.plot(x_axis, ratio_dls, 'C2', label='DLS')
+    ax.plot(x_axis, ratio_ids, 'C3', label='IDS')
+    ax.plot(x_axis, ratio_ucs, 'C4', label='UCS')
+    ax.plot(x_axis, ratio_gbfs, 'C5', label='GBFS')
+    ax.plot(x_axis, ratio_astar, 'C6', label='A*')
+    
+    ax.legend()
+    ax.set_title("Rate vs Depth")
+    ax.set_xlabel("Depth")
+    ax.set_ylabel("Rate")
+    
+    plt.show()
+
         
 def read_file(name):
     path = "data/" + name + ".json"
@@ -410,3 +505,5 @@ def clear_dict(entry):
             "nodes": 0,
             "cost": 0
         }
+if __name__ == '__main__':
+    time_graph()

@@ -81,7 +81,7 @@ def main():
         elif choice == 1:
             print(f"Running BFS on: {start_state}")
             print(f"Goal: {goal_state}\n...")
-            result = bfs(start_node, board)
+            result = bfs(start_node, board, verbose)
             dls_limit = result.max_depth
             if result.verdict == 'success':
                 print("Goal State Found!")
@@ -95,7 +95,7 @@ def main():
             print(f"Running UCS on: {start_state}")
             print(f"Goal: {goal_state}\n...")
             start_node_ucs = NodeGCost(start_state, goal_state, None, None, 0, 0)
-            result = ucs(start_node_ucs, board, verbose=False)
+            result = ucs(start_node_ucs, board, verbose)
             dls_limit = result.max_depth
             if result.verdict == 'success':
                 print("Goal State Found!")
@@ -115,7 +115,7 @@ def main():
             print(f"Goal: {goal_state}")
             print(f"limit: {dls_limit}\n...")
             
-            result = dls(start_node, board, dls_limit)
+            result = dls(start_node, board, dls_limit, verbose)
             if result.verdict == 'success':
                 print("Goal State Found!")
                 show_statistics(result)
@@ -127,7 +127,7 @@ def main():
         elif choice == 4:
             print(f"Running IDS on: {start_state}")
             print(f"Goal: {goal_state}")
-            result = ids(start_node, board, 0)
+            result = ids(start_node, board, 0 ,verbose)
             if result.verdict == 'success':
                 print("Goal State Found!")
                 show_statistics(result)
@@ -139,7 +139,7 @@ def main():
         elif choice == 5:
             print(f"Running GBFS on: {start_state}")
             print(f"Goal: {goal_state}\n...")
-            result = gbfs(start_node, board)
+            result = gbfs(start_node, board, verbose)
             if result.verdict == 'success':
                 print("Goal State Found!")
                 show_statistics(result)
@@ -152,7 +152,7 @@ def main():
             print(f"Running A* on: {start_state}")
             print(f"Goal: {goal_state}\n...")
             start_node_a = NodeFCost(start_state, goal_state, None, None, 0, 0) 
-            result = a_star(start_node_a, board)
+            result = a_star(start_node_a, board, verbose)
             if result.verdict == 'success':
                 print("Goal State Found!")
                 show_statistics(result)

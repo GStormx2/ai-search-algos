@@ -204,7 +204,8 @@ def dls(problem, board, limit, verbose=False):
             elif node.str_state in mapp and node.path_cost < mapp[node.str_state].path_cost:
                 explored.remove(node.str_state)
                 frontier.append(node)
-    
+                mapp[node.str_state] = node
+                
     end_failed = time.perf_counter()    
     return Result(None, "failed", frontier_size, limit, gen_nodes, end_failed - start)
 
